@@ -11,6 +11,7 @@ import java.util.Set;
  * from <code>TestCase</code>.
  */
 public class DefaultRunner extends TestRunner {
+
     @Override
     public Set<TestCase> listTestCases() {
         try {
@@ -20,6 +21,30 @@ public class DefaultRunner extends TestRunner {
             for (Class<? extends TestCase> c : testCaseClasses) {
                 testCases.add(c.newInstance());
             }
+
+            Set<TestResult> testResults = new HashSet<>();
+            for (TestCase testCase : testCases) {
+                TestResult result = new TestResult(testCase.getClass().getName());
+                try {
+                    testCase.run();
+                    // Report success if the test case execution completes without errors or failures
+                    result.reportSuccess(testCase.getClass().getName());
+                } catch (AssertionError error) {
+                    // Report failure if an assertion error occurs during the test case execution
+                    result.reportFailure(testCase.getClass().getName());
+                } catch (Exception e) {
+                    // Report error if any other exception occurs during the test case execution
+                    result.reportError(testCase.getClass().getName());
+                }
+                testResults.add(result);
+            }
+
+            // Generate the JSON report
+            String jsonReport = JsonReportGenerator.generateReport(testResults);
+            System.out.println(jsonReport); // Print the report to console or save it to a file
+
+
+
             return testCases;
         }
         catch(Throwable e) {
