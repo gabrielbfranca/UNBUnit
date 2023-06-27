@@ -38,6 +38,30 @@ public abstract class TestCase {
         }
     }
 
+    protected void assertNotNull(Object object) {
+        if (object == null) {
+            throw new AssertException("Object is null");
+        }
+    }
+
+    protected void assertNotEquals(Object o1, Object o2) {
+        if (o1.equals(o2)) {
+            throw new AssertException("Objects are equal");
+        }
+    }
+
+    protected void assertArrayEquals(Object[] arr1, Object[] arr2) {
+        if (!Arrays.equals(arr1, arr2)) {
+            throw new AssertException("Arrays are not equal");
+        }
+    }
+
+    protected void assertGreaterThan(int value1, int value2) {
+        if (value1 <= value2) {
+            throw new AssertException("Value1 is not greater than Value2");
+        }
+    }
+
     public void before() {}
     public void after() {};
 
