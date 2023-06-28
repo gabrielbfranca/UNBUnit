@@ -5,6 +5,7 @@ import br.unb.cic.test.unit.eh.AssertException;
 import br.unb.cic.test.unit.eh.AssertTrueException;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 /**
  * Define the root of the Test Case class hierarchy.
@@ -40,25 +41,25 @@ public abstract class TestCase {
 
     protected void assertNotNull(Object object) {
         if (object == null) {
-            throw new AssertException("Object is null");
+            throw new AssertException();
         }
     }
 
     protected void assertNotEquals(Object o1, Object o2) {
         if (o1.equals(o2)) {
-            throw new AssertException("Objects are equal");
+            throw new AssertException();
         }
     }
 
     protected void assertArrayEquals(Object[] arr1, Object[] arr2) {
         if (!Arrays.equals(arr1, arr2)) {
-            throw new AssertException("Arrays are not equal");
+            throw new AssertException();
         }
     }
 
     protected void assertGreaterThan(int value1, int value2) {
         if (value1 <= value2) {
-            throw new AssertException("Value1 is not greater than Value2");
+            throw new AssertException();
         }
     }
 

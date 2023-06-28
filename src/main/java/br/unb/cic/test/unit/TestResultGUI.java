@@ -1,8 +1,7 @@
-package br.unb.cic.test.unit.eh;
+package br.unb.cic.test.unit;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Set;
 
 public class TestResultGUI extends JFrame{
     private TestResult testResult;
