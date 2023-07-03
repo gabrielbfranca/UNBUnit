@@ -1,9 +1,14 @@
 package br.unb.cic.test.unit;
 
 import br.unb.cic.test.unit.eh.Failure;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import org.reflections.Reflections;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -40,15 +45,31 @@ public class DefaultRunner extends TestRunner {
             }
 
             // Generate the JSON report
-            String jsonReport = JsonReportGenerator.generateReport(testResults);
-            System.out.println(jsonReport); // Print the report to console or save it to a file
-
-
+            //String jsonReport = JsonReportGenerator.generateReport(testResults);
+            // System.out.println(jsonReport); // Print the report to console or save it to a file
 
             return testCases;
         }
         catch(Throwable e) {
             throw new Failure(e.getMessage());
         }
+    }
+    @Override
+    public List<JsonObject> listReports() {
+        Set<TestCase> testCases = listTestCases();
+        List<JsonObject> reports = new ArrayList<>();
+
+        for (TestCase testCase : testCases) {
+            TestResult result = testCase.run();
+
+            JsonObject report = new JsonObject();
+            report.addProperty("testCase", testCase.getClass().getName());
+            report.add("successes", toJsonArray(result.getSuccesses()));
+            report.add("errors", toJsonArray(result.getErrors()));
+            report.add("failures", toJsonArray(result.getFailures()));
+            reports.add(report);
+        }
+
+        return reports;
     }
 }

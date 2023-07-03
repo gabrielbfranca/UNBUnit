@@ -1,8 +1,11 @@
 package br.unb.cic.test.unit;
 
 import br.unb.cic.test.unit.eh.TestCaseInstantiationError;
+import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -16,7 +19,6 @@ public class SuiteRunner extends TestRunner {
     public SuiteRunner() {
         testClasses = new HashSet<>();
     }
-
     /**
      * Records a TestCase class in the test suite.
      * @param c A class that inherits from <code>TestCase</code>
@@ -39,5 +41,24 @@ public class SuiteRunner extends TestRunner {
             }
         }
         return testCases;
+    }
+
+    @Override
+    public List<JsonObject> listReports() {
+        Set<TestCase> testCases = listTestCases();
+        List<JsonObject> reports = new ArrayList<>();
+
+        for (TestCase testCase : testCases) {
+            TestResult result = testCase.run();
+
+            JsonObject report = new JsonObject();
+            report.addProperty("testCase", testCase.getClass().getName());
+            report.add("successes", toJsonArray(result.getSuccesses()));
+            report.add("errors", toJsonArray(result.getErrors()));
+            report.add("failures", toJsonArray(result.getFailures()));
+            reports.add(report);
+        }
+
+        return reports;
     }
 }
