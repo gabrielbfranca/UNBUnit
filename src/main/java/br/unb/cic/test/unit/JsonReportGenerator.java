@@ -5,36 +5,50 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
-public class JsonReportGenerator {
-    public static String generateReport(Set<TestResult> testResults) {
-        JsonObject report = new JsonObject();
-        report.addProperty("framework", "MinimalistTestFramework");
-        report.add("results", serializeResults(testResults));
-
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(report);
-    }
-
-    private static JsonArray serializeResults(Set<TestResult> testResults) {
-        JsonArray resultsArray = new JsonArray();
-        for (TestResult result : testResults) {
-            JsonObject resultObject = new JsonObject();
-            resultObject.addProperty("testCase", result.getTestCaseName());
-            resultObject.add("successes", toJsonArray(result.getSuccesses()));
-            resultObject.add("errors", toJsonArray(result.getErrors()));
-            resultObject.add("failures", toJsonArray(result.getFailures()));
-            resultsArray.add(resultObject);
+public class JsonReportGenerator implements Report {
+    Set<TestResult> testResults;
+    @Override
+    public void export() {
+        List<JsonObject> reports = listReports();
+        for (JsonObject report : reports) {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            System.out.println(gson.toJson(report));
         }
-        return resultsArray;
     }
 
-    private static JsonArray toJsonArray(Set<String> strings) {
+    @Override
+    public void setResult(Set<TestResult> testResults) {
+        this.testResults = testResults;
+    }
+
+    private List<JsonObject> listReports() {
+
+        List<JsonObject> reports = new ArrayList<>();
+
+        for (TestResult testResult : testResults) {
+
+
+            JsonObject report = new JsonObject();
+            report.addProperty("testCase", testResult.getTestCaseName());
+            report.add("successes", toJsonArray(testResult.getSuccesses()));
+            report.add("errors", toJsonArray(testResult.getErrors()));
+            report.add("failures", toJsonArray(testResult.getFailures()));
+            reports.add(report);
+        }
+
+        return reports;
+    }
+
+    private JsonArray toJsonArray(Set<String> strings) {
         JsonArray jsonArray = new JsonArray();
         for (String string : strings) {
             jsonArray.add(string);
         }
         return jsonArray;
     }
+
 }

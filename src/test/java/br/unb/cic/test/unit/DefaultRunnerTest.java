@@ -24,7 +24,7 @@ public class DefaultRunnerTest {
         DefaultRunner runner = new DefaultRunner();
 
         Set<TestResult> results = runner.runAllTests();
-        runner.printAllReports();
+        runner.exportJSON();
         int success = results.stream().map(result -> result.getSuccesses().size()).reduce(Integer::sum).get();
         int failures = results.stream().map(result -> result.getFailures().size()).reduce(Integer::sum).get();
         int errors = results.stream().map(result -> result.getErrors().size()).reduce(Integer::sum).get();

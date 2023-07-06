@@ -54,22 +54,5 @@ public class DefaultRunner extends TestRunner {
             throw new Failure(e.getMessage());
         }
     }
-    @Override
-    public List<JsonObject> listReports() {
-        Set<TestCase> testCases = listTestCases();
-        List<JsonObject> reports = new ArrayList<>();
 
-        for (TestCase testCase : testCases) {
-            TestResult result = testCase.run();
-
-            JsonObject report = new JsonObject();
-            report.addProperty("testCase", testCase.getClass().getName());
-            report.add("successes", toJsonArray(result.getSuccesses()));
-            report.add("errors", toJsonArray(result.getErrors()));
-            report.add("failures", toJsonArray(result.getFailures()));
-            reports.add(report);
-        }
-
-        return reports;
-    }
 }

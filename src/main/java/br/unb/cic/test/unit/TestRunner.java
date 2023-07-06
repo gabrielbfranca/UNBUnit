@@ -17,21 +17,12 @@ import java.util.Set;
  */
 public abstract class TestRunner {
     public abstract Set<TestCase> listTestCases();
-    public abstract List<JsonObject> listReports();
 
-    public void printAllReports() {
-        List<JsonObject> reports = listReports();
-        for (JsonObject report : reports) {
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            System.out.println(gson.toJson(report));
-        }
-    }
-    public JsonArray toJsonArray(Set<String> strings) {
-        JsonArray jsonArray = new JsonArray();
-        for (String string : strings) {
-            jsonArray.add(string);
-        }
-        return jsonArray;
+
+    public void exportJSON() {
+        JsonReportGenerator jsonReport = new JsonReportGenerator();
+        jsonReport.setResult(runAllTests());
+        jsonReport.export();
     }
     /**
      * This is a (template) method that executes all
@@ -45,7 +36,9 @@ public abstract class TestRunner {
         Set<TestResult> result = new HashSet<>();
         for(TestCase tc: testCases) {
             result.add(tc.run());
+
         }
+
         return result;
     }
 }
