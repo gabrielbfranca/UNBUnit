@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class JsonReportGenerator implements Report {
-    Set<TestResult> testResults;
+public class JsonReportGenerator extends Report {
+
     @Override
     public void export() {
         List<JsonObject> reports = listReports();
@@ -20,10 +20,6 @@ public class JsonReportGenerator implements Report {
         }
     }
 
-    @Override
-    public void setResult(Set<TestResult> testResults) {
-        this.testResults = testResults;
-    }
 
     private List<JsonObject> listReports() {
 

@@ -1,12 +1,5 @@
 package br.unb.cic.test.unit;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import java.util.ArrayList;
-import java.util.List;
-
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,7 +10,11 @@ import java.util.Set;
  */
 public abstract class TestRunner {
     public abstract Set<TestCase> listTestCases();
+    public Set<Report> Reports;
 
+    public TestRunner(Set<Report> reports) {
+        this.Reports = reports;
+    }
 
     public void exportJSON() {
         JsonReportGenerator jsonReport = new JsonReportGenerator();
@@ -37,6 +34,10 @@ public abstract class TestRunner {
         for(TestCase tc: testCases) {
             result.add(tc.run());
 
+        }
+
+        for (Report report : Reports) {
+            report.setResult(result);
         }
 
         return result;
