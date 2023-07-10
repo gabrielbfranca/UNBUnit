@@ -17,6 +17,10 @@ import java.util.Set;
  */
 public class DefaultRunner extends TestRunner {
 
+    public DefaultRunner(Set<Report> reports) {
+        super(reports);
+    }
+
     @Override
     public Set<TestCase> listTestCases() {
         try {

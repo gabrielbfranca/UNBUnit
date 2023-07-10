@@ -1,6 +1,7 @@
 package br.unb.cic.test.unit;
 
 
+import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,16 +12,23 @@ import java.util.Set;
 public abstract class TestRunner {
     public abstract Set<TestCase> listTestCases();
     public Set<Report> Reports;
-
+    @Inject
     public TestRunner(Set<Report> reports) {
         this.Reports = reports;
+
     }
 
-    public void exportJSON() {
-        JsonReportGenerator jsonReport = new JsonReportGenerator();
-        jsonReport.setResult(runAllTests());
-        jsonReport.export();
+    public void exportReport(Class<? extends Report> reportType) {
+        for (Report report : Reports) {
+            if (reportType.isInstance(report)) {
+                report.export();
+                return;
+            }
+        }
+
+        throw new IllegalArgumentException("Report of type " + reportType.getSimpleName() + " not found in the reports list.");
     }
+
     /**
      * This is a (template) method that executes all
      * test cases coming from <code>listTestCases</code>.

@@ -16,7 +16,8 @@ import java.util.Set;
 public class SuiteRunner extends TestRunner {
     private Set<Class<? extends TestCase>> testClasses;
 
-    public SuiteRunner() {
+    public SuiteRunner(Set<Report> reports) {
+        super(reports);
         testClasses = new HashSet<>();
     }
     /**
