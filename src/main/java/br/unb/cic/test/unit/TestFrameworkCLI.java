@@ -23,11 +23,14 @@ public class TestFrameworkCLI {
 
             if (cmd.hasOption(TYPE_OPTION)) {
                 String type = cmd.getOptionValue(TYPE_OPTION);
-
+                Set<Report> reports = new HashSet<>();
                 if (type.equalsIgnoreCase("default")) {
-                    runDefaultTests(cmd);
+
+                    TestRunner runner = new DefaultRunner(reports);
+                    runTests(cmd, runner);
                 } else if (type.equalsIgnoreCase("suite")) {
-                    runSuiteTests(cmd);
+                    TestRunner runner = new SuiteRunner(reports);
+                    runTests(cmd, runner);
                 } else {
                     System.err.println("Invalid test type: " + type);
                 }
@@ -75,22 +78,20 @@ public class TestFrameworkCLI {
         return options;
     }
 
-    private static void runDefaultTests(CommandLine cmd) {
+    private static void runTests(CommandLine cmd, TestRunner runner) {
         boolean silent = cmd.hasOption(SILENT_OPTION);
         String fileType = cmd.getOptionValue(OUT_OPTION, "");
         String filePath = cmd.getOptionValue(FILE_OPTION);
 
-        Set<Report> reports = new HashSet<>();
-        TestRunner testRunner = new DefaultRunner(reports);
 
-        Set<TestResult> results = testRunner.runAllTests();
+        Set<TestResult> results = runner.runAllTests();
 
 
         Map<String, Class<? extends Report>> reportTypeMap = getReportTypemap();
 
 
         if (!silent) {
-            testRunner.exportReport(DefaultReport.class, filePath, results);
+            runner.exportReport(DefaultReport.class, filePath, results);
         }
 
         if (fileType.isEmpty()) {
@@ -100,25 +101,18 @@ public class TestFrameworkCLI {
                     continue; // Skip exporting DefaultReport when silent mode is enabled
                 }
 
-                testRunner.exportReport(reportClass, filePath, results);
+                runner.exportReport(reportClass, filePath, results);
             }
         } else {
             Class<? extends Report> reportClass = reportTypeMap.get(fileType);
-            if (reportClass == null) {
-                System.err.println("Unsupported file type: " + fileType);
-                return;
-            }
 
-            testRunner.exportReport(reportClass, filePath, results);
+            runner.exportReport(reportClass, filePath, results);
 
         }
 
 
     }
 
-    private static void runSuiteTests(CommandLine cmd) {
-        // TODO: Implement running suite tests
-    }
 
     private static Map<String, Class<? extends Report>> getReportTypemap() {
         Map<String, Class<? extends Report>> reportTypeMap = new HashMap<>();
