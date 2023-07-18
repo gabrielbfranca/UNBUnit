@@ -11,22 +11,41 @@ import java.util.Set;
  */
 public abstract class TestRunner {
     public abstract Set<TestCase> listTestCases();
-    public Set<Report> Reports;
+    public Set<Report> reports;
     @Inject
     public TestRunner(Set<Report> reports) {
-        this.Reports = reports;
+        this.reports = reports;
+        reports.add(new DefaultReport());
+        reports.add(new JsonReportGenerator());
 
     }
 
-    public void exportReport(Class<? extends Report> reportType) {
-        for (Report report : Reports) {
+    public void exportReport(Class<? extends Report> reportType, String filePath, Set<TestResult> results) {
+        for (Report report : reports) {
             if (reportType.isInstance(report)) {
+                report.setFilePath(filePath);
+                report.setResult(results);
                 report.export();
                 return;
             }
         }
 
         throw new IllegalArgumentException("Report of type " + reportType.getSimpleName() + " not found in the reports list.");
+    }
+
+    public void exportAllReports(String filePath, Set<TestResult> results, boolean silent) {
+        for (Report report : reports) {
+            if (silent && report instanceof DefaultReport) {
+                continue;
+            }
+            report.setFilePath(filePath);
+            report.setResult(results);
+            report.export();
+        }
+    }
+
+    public void removeReport(Class<? extends Report> reportType) {
+
     }
 
     /**
@@ -44,10 +63,12 @@ public abstract class TestRunner {
 
         }
 
-        for (Report report : Reports) {
+        for (Report report : reports) {
             report.setResult(result);
         }
 
         return result;
     }
+
+
 }

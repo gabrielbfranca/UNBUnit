@@ -5,18 +5,26 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 public class JsonReportGenerator extends Report {
 
+
     @Override
     public void export() {
         List<JsonObject> reports = listReports();
         for (JsonObject report : reports) {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            System.out.println(gson.toJson(report));
+
+            try (FileWriter writer = new FileWriter(filePath)) {
+                    gson.toJson(report, writer);
+            } catch (IOException e) {
+                System.err.println("Error exporting JSON report: " + e.getMessage());
+            }
         }
     }
 

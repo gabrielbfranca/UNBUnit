@@ -24,7 +24,6 @@ public class DefaultRunnerTest {
     @Test
     public void executeSampleTestes() {
         Set<Report> reports = new HashSet<>();
-        reports.add(new JsonReportGenerator());
         DefaultRunner runner = new DefaultRunner(reports);
 
         Set<TestResult> results = runner.runAllTests();
@@ -33,7 +32,7 @@ public class DefaultRunnerTest {
         int failures = results.stream().map(result -> result.getFailures().size()).reduce(Integer::sum).get();
         int errors = results.stream().map(result -> result.getErrors().size()).reduce(Integer::sum).get();
 
-        runner.exportReport(JsonReportGenerator.class);
+        runner.exportReport(JsonReportGenerator.class, "F:\\Users\\gabri\\Downloads\\report.json", results);
 
         Assert.assertEquals(3, success);
         Assert.assertEquals(1, failures);
