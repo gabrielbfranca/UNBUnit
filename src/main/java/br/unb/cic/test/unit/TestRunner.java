@@ -33,20 +33,8 @@ public abstract class TestRunner {
         throw new IllegalArgumentException("Report of type " + reportType.getSimpleName() + " not found in the reports list.");
     }
 
-    public void exportAllReports(String filePath, Set<TestResult> results, boolean silent) {
-        for (Report report : reports) {
-            if (silent && report instanceof DefaultReport) {
-                continue;
-            }
-            report.setFilePath(filePath);
-            report.setResult(results);
-            report.export();
-        }
-    }
 
-    public void removeReport(Class<? extends Report> reportType) {
 
-    }
 
     /**
      * This is a (template) method that executes all
@@ -61,10 +49,6 @@ public abstract class TestRunner {
         for(TestCase tc: testCases) {
             result.add(tc.run());
 
-        }
-
-        for (Report report : reports) {
-            report.setResult(result);
         }
 
         return result;
