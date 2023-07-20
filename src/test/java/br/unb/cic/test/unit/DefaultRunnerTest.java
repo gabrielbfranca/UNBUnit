@@ -32,7 +32,9 @@ public class DefaultRunnerTest {
         int success = results.stream().map(result -> result.getSuccesses().size()).reduce(Integer::sum).get();
         int failures = results.stream().map(result -> result.getFailures().size()).reduce(Integer::sum).get();
         int errors = results.stream().map(result -> result.getErrors().size()).reduce(Integer::sum).get();
+        ReportManager reportManager = new ReportManager();
 
+        reportManager.exportReport(runner.getReports(), "json", "report.json",results);
 
         Assert.assertEquals(3, success);
         Assert.assertEquals(1, failures);

@@ -7,8 +7,6 @@ import com.google.gson.JsonObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 public class JsonReportGenerator extends Report {
@@ -16,35 +14,26 @@ public class JsonReportGenerator extends Report {
 
     @Override
     public void export() {
-        List<JsonObject> reports = listReports();
-        for (JsonObject report : reports) {
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        JsonObject reportObject = new JsonObject();
 
-            try (FileWriter writer = new FileWriter(filePath)) {
-                    gson.toJson(report, writer);
-            } catch (IOException e) {
-                System.err.println("Error exporting JSON report: " + e.getMessage());
-            }
-        }
-    }
-
-
-    private List<JsonObject> listReports() {
-
-        List<JsonObject> reports = new ArrayList<>();
-
+        JsonArray testResultsArray = new JsonArray();
         for (TestResult testResult : testResults) {
-
-
-            JsonObject report = new JsonObject();
-            report.addProperty("testCase", testResult.getTestCaseName());
-            report.add("successes", toJsonArray(testResult.getSuccesses()));
-            report.add("errors", toJsonArray(testResult.getErrors()));
-            report.add("failures", toJsonArray(testResult.getFailures()));
-            reports.add(report);
+            JsonObject testResultObject = new JsonObject();
+            testResultObject.addProperty("testCase", testResult.getTestCaseName());
+            testResultObject.add("successes", toJsonArray(testResult.getSuccesses()));
+            testResultObject.add("errors", toJsonArray(testResult.getErrors()));
+            testResultObject.add("failures", toJsonArray(testResult.getFailures()));
+            testResultsArray.add(testResultObject);
         }
 
-        return reports;
+        reportObject.add("testResults", testResultsArray);
+
+        try (FileWriter writer = new FileWriter(filePath)) {
+            gson.toJson(reportObject, writer);
+        } catch (IOException e) {
+            System.err.println("Error exporting JSON report: " + e.getMessage());
+        }
     }
 
     private JsonArray toJsonArray(Set<String> strings) {

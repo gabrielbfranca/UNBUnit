@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 
-// Exemplo de commando --type default --out json --file F:\Users\gabri\Downloads\report.json
+// Exemplo de commando --type default --out json --file F:\\Users\\<usuario>\\Downloads\\report.json
 public class TestFrameworkCLI {
     private static final String TYPE_OPTION = "type";
     private static final String SILENT_OPTION = "silent";
@@ -77,7 +77,7 @@ public class TestFrameworkCLI {
         options.addOption(Option.builder(FILE_OPTION)
                 .longOpt("file")
                 .argName("path")
-                .desc("Specify the file path for the report")
+                .desc("Specify the file path for the report, include the name of the file and type you want to export")
                 .hasArg()
                 .required()
                 .build());
