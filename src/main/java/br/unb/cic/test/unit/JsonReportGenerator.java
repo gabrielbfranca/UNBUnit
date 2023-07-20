@@ -29,7 +29,7 @@ public class JsonReportGenerator extends Report {
 
         reportObject.add("testResults", testResultsArray);
 
-        try (FileWriter writer = new FileWriter(filePath)) {
+        try (FileWriter writer = new FileWriter(filePath + ".json")) {
             gson.toJson(reportObject, writer);
         } catch (IOException e) {
             System.err.println("Error exporting JSON report: " + e.getMessage());

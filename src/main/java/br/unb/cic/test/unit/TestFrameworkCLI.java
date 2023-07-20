@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Set;
 
 
-// Exemplo de commando --type default --out json --file F:\\Users\\<usuario>\\Downloads\\report.json
-// ou --file report.json para gerar o report nesse caminho
+// Exemplo de commando --type default --out json --file F:\\Users\\<usuario>\\Downloads\\report
+// ou --file report para gerar o report nesse caminho
 public class TestFrameworkCLI {
     private static final String TYPE_OPTION = "type";
     private static final String SILENT_OPTION = "silent";
@@ -78,7 +78,7 @@ public class TestFrameworkCLI {
         options.addOption(Option.builder(FILE_OPTION)
                 .longOpt("file")
                 .argName("path")
-                .desc("Specify the file path for the report, include the name of the file and type you want to export")
+                .desc("Specify the file path for the report, include the name of the file")
                 .hasArg()
                 .required()
                 .build());
@@ -100,7 +100,7 @@ public class TestFrameworkCLI {
 
         if (!silent) {
 
-            reportManager.exportReport(runner.getReports(), "json", filePath, results);
+            reportManager.exportReport(runner.getReports(), "default", filePath, results);
         }
 
         if (fileType.isEmpty()) {
