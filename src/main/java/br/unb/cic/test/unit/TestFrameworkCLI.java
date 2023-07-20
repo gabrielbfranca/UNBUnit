@@ -8,6 +8,7 @@ import java.util.Set;
 
 
 // Exemplo de commando --type default --out json --file F:\\Users\\<usuario>\\Downloads\\report.json
+// ou --file report.json para gerar o report nesse caminho
 public class TestFrameworkCLI {
     private static final String TYPE_OPTION = "type";
     private static final String SILENT_OPTION = "silent";
