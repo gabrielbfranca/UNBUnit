@@ -1,5 +1,6 @@
 package br.unb.cic.test.unit;
 
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -32,7 +33,6 @@ public class DefaultRunnerTest {
         int failures = results.stream().map(result -> result.getFailures().size()).reduce(Integer::sum).get();
         int errors = results.stream().map(result -> result.getErrors().size()).reduce(Integer::sum).get();
 
-        runner.exportReport(JsonReportGenerator.class, "F:\\Users\\gabri\\Downloads\\report.json", results);
 
         Assert.assertEquals(3, success);
         Assert.assertEquals(1, failures);
