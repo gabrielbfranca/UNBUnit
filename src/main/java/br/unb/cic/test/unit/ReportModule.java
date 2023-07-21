@@ -9,6 +9,7 @@ public class ReportModule extends AbstractModule {
     protected void configure() {
         Multibinder<Report> reportMultibinder = Multibinder.newSetBinder(binder(), Report.class);
 
+
         // Add the DefaultReport and JsonReportGenerator to the Multibinder
         reportMultibinder.addBinding().to(DefaultReport.class);
         reportMultibinder.addBinding().to(JsonReportGenerator.class);
