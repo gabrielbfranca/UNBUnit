@@ -6,12 +6,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+// Exemplo de commando --type default --out json --file report
 
-// Exemplo de commando --type default --out json --file F:\\Users\\<usuario>\\Downloads\\report
-// ou --file report para gerar o report nesse caminho
 public class TestFrameworkCLI {
     private static final String TYPE_OPTION = "type";
     private static final String SILENT_OPTION = "silent";
+    private static final String PACKAGE_OPTION = "package";
     private static final String OUT_OPTION = "out";
     private static final String FILE_OPTION = "file";
 
@@ -31,6 +31,8 @@ public class TestFrameworkCLI {
                 String type = cmd.getOptionValue(TYPE_OPTION);
 
                 Set<Report> reports = new HashSet<>();
+
+
 
                 if (type.equalsIgnoreCase("default")) {
 
@@ -68,6 +70,13 @@ public class TestFrameworkCLI {
                 .desc("Run the tests silently without printing the default report")
                 .build());
 
+        options.addOption(Option.builder(PACKAGE_OPTION)
+                .longOpt("package")
+                .argName("package path")
+                .desc("Specify the package where the testCases are located")
+                .hasArg()
+                .build());
+
         options.addOption(Option.builder(OUT_OPTION)
                 .longOpt("out")
                 .argName("fileType")
@@ -88,11 +97,12 @@ public class TestFrameworkCLI {
 
     private static void runTests(CommandLine cmd, TestRunner runner) {
         boolean silent = cmd.hasOption(SILENT_OPTION);
+        String packagePath = cmd.getOptionValue(PACKAGE_OPTION, "br.unb.cic.test.unit.samples");
         String fileType = cmd.getOptionValue(OUT_OPTION, "");
         String filePath = cmd.getOptionValue(FILE_OPTION);
 
 
-        Set<TestResult> results = runner.runAllTests();
+        Set<TestResult> results = runner.runAllTests(packagePath);
 
 
         Map<String, Class<? extends Report>> reportTypeMap = reportManager.getReportTypemap();

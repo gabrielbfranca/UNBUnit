@@ -10,9 +10,11 @@ import java.util.Set;
  * override the abstract method <code>listTestCases()</code>.
  */
 public abstract class TestRunner {
-    public abstract Set<TestCase> listTestCases();
+    public abstract Set<TestCase> listTestCases(String packagePath);
     public Set<Report> reports;
+
     public TestRunner(Set<Report> reports) {
+
         this.reports = reports;
         reports.add(new DefaultReport());
         reports.add(new JsonReportGenerator());
@@ -29,8 +31,8 @@ public abstract class TestRunner {
      * @return Return a set of test results---one for each test case
      * in run.
      */
-    public Set<TestResult> runAllTests() {
-        Set<TestCase> testCases = listTestCases();
+    public Set<TestResult> runAllTests(String packagePath) {
+        Set<TestCase> testCases = listTestCases(packagePath);
         Set<TestResult> result = new HashSet<>();
         for(TestCase tc: testCases) {
             result.add(tc.run());

@@ -16,9 +16,10 @@ public class DefaultRunnerTest {
     public void listTestCases() {
         Set<Report> reports = new HashSet<>();
         DefaultRunner runner = new DefaultRunner(reports);
+        String packagePath = "br.unb.cic.test.unit.samples";
 
-        Assert.assertTrue(!runner.listTestCases().isEmpty());
-        Assert.assertEquals(2, runner.listTestCases().size());
+        Assert.assertTrue(!runner.listTestCases(packagePath).isEmpty());
+        Assert.assertEquals(2, runner.listTestCases(packagePath).size());
     }
 
 
@@ -27,14 +28,14 @@ public class DefaultRunnerTest {
         Set<Report> reports = new HashSet<>();
         DefaultRunner runner = new DefaultRunner(reports);
 
-        Set<TestResult> results = runner.runAllTests();
+        Set<TestResult> results = runner.runAllTests("br.unb.cic.test.unit.samples");
 
         int success = results.stream().map(result -> result.getSuccesses().size()).reduce(Integer::sum).get();
         int failures = results.stream().map(result -> result.getFailures().size()).reduce(Integer::sum).get();
         int errors = results.stream().map(result -> result.getErrors().size()).reduce(Integer::sum).get();
         ReportManager reportManager = new ReportManager();
 
-        reportManager.exportReport(runner.getReports(), "json", "report",results);
+        reportManager.exportReport(runner.getReports(), "json", "report", results);
 
         Assert.assertEquals(3, success);
         Assert.assertEquals(1, failures);

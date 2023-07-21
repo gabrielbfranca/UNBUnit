@@ -1,14 +1,10 @@
 package br.unb.cic.test.unit;
 
 import br.unb.cic.test.unit.eh.Failure;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
+
 import org.reflections.Reflections;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -22,9 +18,10 @@ public class DefaultRunner extends TestRunner {
     }
 
     @Override
-    public Set<TestCase> listTestCases() {
+    public Set<TestCase> listTestCases(String packagePath) {
         try {
-            Reflections reflections = new Reflections();
+
+            Reflections reflections = new Reflections(packagePath);
             Set<Class<? extends TestCase>> testCaseClasses = reflections.getSubTypesOf(TestCase.class);
             Set<TestCase> testCases = new HashSet<>();
             for (Class<? extends TestCase> c : testCaseClasses) {
@@ -47,10 +44,6 @@ public class DefaultRunner extends TestRunner {
                 }
                 testResults.add(result);
             }
-
-            // Generate the JSON report
-            //String jsonReport = JsonReportGenerator.generateReport(testResults);
-            // System.out.println(jsonReport); // Print the report to console or save it to a file
 
             return testCases;
         }

@@ -32,7 +32,7 @@ public class SuiteRunner extends TestRunner {
     }
 
     @Override
-    public Set<TestCase> listTestCases() {
+    public Set<TestCase> listTestCases(String packagePath) {
         Set<TestCase> testCases = new HashSet<>();
         for (Class<? extends TestCase> c : testClasses) {
             try {
