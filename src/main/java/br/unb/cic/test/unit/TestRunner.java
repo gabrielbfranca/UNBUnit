@@ -2,6 +2,8 @@ package br.unb.cic.test.unit;
 
 
 
+import com.google.inject.Inject;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,11 +15,11 @@ public abstract class TestRunner {
     public abstract Set<TestCase> listTestCases(String packagePath);
     public Set<Report> reports;
 
+    @Inject
     public TestRunner(Set<Report> reports) {
 
         this.reports = reports;
-        reports.add(new DefaultReport());
-        reports.add(new JsonReportGenerator());
+
     }
 
     public Set<Report> getReports() {

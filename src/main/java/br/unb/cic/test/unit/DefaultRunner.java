@@ -2,6 +2,7 @@ package br.unb.cic.test.unit;
 
 import br.unb.cic.test.unit.eh.Failure;
 
+import com.google.inject.Inject;
 import org.reflections.Reflections;
 
 import java.util.HashSet;
@@ -13,6 +14,7 @@ import java.util.Set;
  */
 public class DefaultRunner extends TestRunner {
 
+    @Inject
     public DefaultRunner(Set<Report> reports) {
         super(reports);
     }

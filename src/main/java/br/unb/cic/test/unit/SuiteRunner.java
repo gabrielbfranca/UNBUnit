@@ -2,6 +2,7 @@ package br.unb.cic.test.unit;
 
 import br.unb.cic.test.unit.eh.TestCaseInstantiationError;
 import com.google.gson.JsonObject;
+import com.google.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,6 +17,7 @@ import java.util.Set;
 public class SuiteRunner extends TestRunner {
     private Set<Class<? extends TestCase>> testClasses;
 
+    @Inject
     public SuiteRunner(Set<Report> reports) {
         super(reports);
         testClasses = new HashSet<>();

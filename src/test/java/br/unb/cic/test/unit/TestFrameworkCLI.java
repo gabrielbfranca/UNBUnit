@@ -1,5 +1,7 @@
 package br.unb.cic.test.unit;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.apache.commons.cli.*;
 
 import java.util.HashSet;
@@ -26,6 +28,8 @@ public class TestFrameworkCLI {
         try {
             CommandLine cmd = parser.parse(options, args);
 
+            Injector injector = Guice.createInjector(new ReportModule());
+
             if (cmd.hasOption(TYPE_OPTION)) {
 
                 String type = cmd.getOptionValue(TYPE_OPTION);
@@ -36,10 +40,10 @@ public class TestFrameworkCLI {
 
                 if (type.equalsIgnoreCase("default")) {
 
-                    DefaultRunner runner = new DefaultRunner(reports);
+                    DefaultRunner runner = injector.getInstance(DefaultRunner.class);
                     runTests(cmd, runner);
                 } else if (type.equalsIgnoreCase("suite")) {
-                    SuiteRunner runner = new SuiteRunner(reports);
+                    SuiteRunner runner = injector.getInstance(SuiteRunner.class);
                     runTests(cmd, runner);
                 } else {
                     System.err.println("Invalid test type: " + type);
